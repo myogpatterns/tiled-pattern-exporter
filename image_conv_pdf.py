@@ -9,9 +9,9 @@ import img2pdf, wand.image
 
 def image_conv_pdf(dir_path):
     #check if pattern-#.pngs exist
-    png_list = sorted(glob.glob(dir_path+'pattern-*.png'))
+    png_list = sorted(glob.glob(dir_path+'*-*.png'))
     
-    if glob.glob(dir_path+'pattern-*.png'): 
+    if glob.glob(dir_path+'*-*.png'): 
         #create_folder('.','pdfs')
         pass
     else:

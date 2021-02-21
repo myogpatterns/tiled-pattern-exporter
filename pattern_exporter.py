@@ -10,9 +10,13 @@
 #   4. Merge individual pdfs using pdf_merge.py
 #   5. Watermark cut lines with pdf_watermarker.py
 #
+#   Execute with the following command:
+#       Place input_file.png in script directory
+#       python pattern_exporter.py 'input_file.png' 'output_file.pdf'
+#
 #--------------------------------------------------------------
 
-import sys, os, string, time
+import sys, os, shutil, string, time
 from image_tiler import image_tiler
 from image_conv_pdf import image_conv_pdf
 from pdf_merge import merge_pdfs
@@ -74,7 +78,8 @@ def pattern_exporter(input_png, output_pdf):
             output_pdf,
             'watermark.pdf')
     else:
-        print("Watermark.PDF not found")
+        shutil.copy(dir_path+'merged.pdf',output_pdf)
+        print("Watermark.PDF not found. "+output_pdf+" created without watermark.")
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
