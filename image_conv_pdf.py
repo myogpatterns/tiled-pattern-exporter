@@ -5,7 +5,7 @@
 # PDFs at 300dpi
 
 import os, glob, shutil
-import img2pdf, wand.image
+import wand.image  
 
 def image_conv_pdf(dir_path):
     #check if pattern-#.pngs exist
