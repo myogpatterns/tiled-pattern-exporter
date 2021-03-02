@@ -10,9 +10,6 @@
 #   4. Merge individual pdfs using pdf_merge.py
 #   5. Watermark cut lines with pdf_watermarker.py
 #
-#   Execute with the following command:
-#       Place input_file.png in script directory
-#       python pattern_exporter.py 'input_file.png' 'output_file.pdf'
 #
 #--------------------------------------------------------------
 
