@@ -1,0 +1,8 @@
+Running from pattern_exporter
+image_tiler returns a tile_list (nested list)
+Pass tile_list to coverter 
+    Enumerating page number working
+    
+    ---->>>> Next <<<<----
+    Use nested list to assign A1, B2, alignment guides
+    Draw function for alignment guide
