@@ -54,14 +54,14 @@ def pattern_exporter(input_png, output_pdf, format):
 
     # 2 tile PNG with image_tiler.py --- Letter / A4
 
-    image_tiler(
+    tile_list = image_tiler(
         input_png, 
         format, 
         dir_path)
 
     # 3 convert individual PNGs to PDFs
 
-    image_conv_pdf(dir_path)
+    image_conv_pdf(dir_path, tile_list)
    
     # 4 merge the individual PDFs with pdf_merge.py
 
@@ -83,4 +83,4 @@ if __name__ == '__main__':
     pattern_exporter(
         input_png='pattern.png', 
         output_pdf='patternSheets.pdf',
-        format='tabloid')
+        format='letter')

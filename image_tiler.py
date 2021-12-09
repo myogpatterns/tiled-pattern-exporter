@@ -15,23 +15,19 @@ def image_tiler(image, format, dir_path):
 
     # constants
     ppi=round(image.info['dpi'][0])
-    format = format.lower()
+
+
+    format = format.lower() #make case-insensitive
 
     if (format == 'letter'):
         width = 7.5
         height = 10
-        tile_width = round(width*ppi)
-        tile_height = round(height*ppi)
     elif (format == 'tabloid'):
         width = 15
         height = 10
-        tile_width = round(width*ppi)
-        tile_height = round(height*ppi)
     elif (format == 'a0'):
         width = 30
         height = 45
-        tile_width = round(width*ppi)
-        tile_height = round(height*ppi)
     else:
         print("Format must be letter, tabloid, or a0. Case sensitive.")
         exit()
@@ -48,21 +44,30 @@ def image_tiler(image, format, dir_path):
         exit()
  
     # tile image into seperate PNGs and save in dir_path
-    #if image.size[0] % tile_width == 0 and image.size[1] % tile_height ==0 :
+    tile_width = round(width*ppi)
+    tile_height = round(height*ppi)
+    
     currentx = 0
     currenty = 0
     i=1
+    all_tiles = []
+    
     while currenty < image.size[1]:
+        row_tile = []
         while currentx < image.size[0]:
             tile = image.crop((currentx,currenty,currentx + tile_width,currenty + tile_height))
-            tile.save(dir_path + os.path.splitext(image.filename)[0] + "-" + str(i).zfill(2) + ".png","PNG", dpi=(ppi,ppi))
+            tile_id = dir_path + os.path.splitext(image.filename)[0] + "-" + str(i).zfill(2) +".png"
+            tile.save(tile_id, "PNG", dpi=(ppi,ppi))
             currentx += tile_width
+            row_tile.append(tile_id)
             i+=1
         currenty += tile_height
+        all_tiles.append(row_tile)
         currentx = 0
     print("Tiled",i-1,"single page pattern sheets")
-    #else:
-     #   print ("Your image does not fit neatly into",tile_width,"*",tile_height,"tiles")
+
+    return(all_tiles)
+
 
 if __name__ == '__main__':
     image_tiler(
