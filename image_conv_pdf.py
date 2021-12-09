@@ -7,6 +7,7 @@
 import os, glob, shutil, math
 from wand.image import Image, Color
 from wand.drawing import Drawing
+import wand.display
 import image_tiler
 
 def image_conv_pdf(dir_path, tile_list):
@@ -28,8 +29,10 @@ def image_conv_pdf(dir_path, tile_list):
                 print("Processing",i)
             else:
                 pass
-        
-        #convert to pngs to pdfs
+
+
+
+    #convert to pngs to pdfs
     #for index, j in enumerate(png_list):
     pg_num = 1
     for list in tile_list:
@@ -37,13 +40,21 @@ def image_conv_pdf(dir_path, tile_list):
             convert2pdf(index, j, pg_num)
             pg_num += 1
 
+
+
+
 def convert2pdf(index, image_path, pg_num):
     filein = image_path
     fileout = os.path.splitext(filein)[0]+'.pdf'
     
     # wand save individual jpgs or pdfs not working    
-    with Image(filename=filein, resolution=300, units='pixelsperinch') as img:
-        #img.border('white',150,150)
+    with Image(filename=filein, resolution=300) as img:
+        
+        #debug display
+        #wand.display.display(img)
+        #print(img.resolution)
+
+
         img.border('white', 150, 150)
         #border 0.5 inch = 150/300
         
@@ -76,8 +87,10 @@ def convert2pdf(index, image_path, pg_num):
             draw.text(int(img.width-100), int(img.height-100),str(pg_num))
             draw(img)
 
+        wand.display.display(img)
 
         #img.save(filename=filein)   #overights png file with border and such
+        
         with img.convert('pdf') as converted:
             converted.save(filename=fileout)
             print("Converted",filein,"from",img.format,"to",fileout,converted.format)
@@ -97,4 +110,4 @@ def removeAlpha(image_path, new_image_path):
 
 if __name__ == '__main__':
     image_conv_pdf(
-        dir_path='pdfs/', tile_list=[])
+        dir_path='pdfs/', tile_list=[['pdfs/pattern-01.png','pdfs/pattern-02.png'],['pdfs/pattern-03.png','pdfs/pattern-04.png']])

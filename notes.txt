@@ -2,7 +2,12 @@ Running from pattern_exporter
 image_tiler returns a tile_list (nested list)
 Pass tile_list to coverter 
     Enumerating page number working
+    Remove output file name parameter from pattern_exporter. Use format in filename
     
     ---->>>> Next <<<<----
-    Use nested list to assign A1, B2, alignment guides
-    Draw function for alignment guide
+    Use nested list to assign A1, B2, alignment guides - too complicated. use idea below
+    Draw function for alignment guide - us graphic overlay instead of draws
+
+    ---->>>> Idea <<<<----
+    Replace PIL, draw overlays then crop. Then add borders and page numbers. REduce complexity, looping, and listing
+    Keep merge as standalone for common usage

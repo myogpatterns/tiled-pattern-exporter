@@ -25,13 +25,12 @@ from pdf_merge import merge_pdfs
 start_time = time.time()
 
 
-def pattern_exporter(input_png, output_pdf, format):
+def pattern_exporter(input_png, format):
 
     # Set variables
     if len(sys.argv) > 1:
         input_png = sys.argv[1]
-        output_pdf = sys.argv[2]
-        format = sys.argv[3]
+        format = sys.argv[2]
     
     dir_path = 'pdfs/'
     
@@ -82,5 +81,4 @@ def pattern_exporter(input_png, output_pdf, format):
 if __name__ == '__main__':
     pattern_exporter(
         input_png='pattern.png', 
-        output_pdf='patternSheets.pdf',
         format='letter')
