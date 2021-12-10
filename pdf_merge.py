@@ -25,7 +25,7 @@ def merge_pdfs(dir_path, output):
     # Write out the merged PDF
     with open(dir_path+output, 'wb') as out:
         pdf_writer.write(out)
-        print("Merged PDFs into",dir_path+output)
+        #print("Merged PDFs into",dir_path+output)
 
 if __name__ == '__main__':
     merge_pdfs(dir_path='pdfs/', output='merged.pdf')

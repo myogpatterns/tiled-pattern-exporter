@@ -18,19 +18,18 @@
 #--------------------------------------------------------------
 
 import sys, os, shutil, string, time
-from image_tiler import image_tiler
-from image_conv_pdf import image_conv_pdf
+from pattern_tile import pattern_tile
 from pdf_merge import merge_pdfs
 
 start_time = time.time()
 
 
-def pattern_exporter(input_png, format):
+def pattern_exporter(input_png):
 
     # Set variables
     if len(sys.argv) > 1:
         input_png = sys.argv[1]
-        format = sys.argv[2]
+        #format = sys.argv[2]
     
     dir_path = 'pdfs/'
     
@@ -38,47 +37,54 @@ def pattern_exporter(input_png, format):
     # 1 check if pattern.PNG exists, create or cleanup dir_paths folder
 
     if os.path.exists(input_png):
-        if os.path.exists(dir_path):
-            try:
-                for i in os.listdir(dir_path):
-                    os.remove(dir_path+i)
-            except OSError as e:
-                print("Error: %s : %s" % (dir_path, e.strerror))
-        else: 
-            os.mkdir(dir_path)
-        print("Preparing", dir_path)
+        prepare_temp_dir(dir_path)
+        
     else:
-        print(input_png,"does not exist in",os.path.abspath('.'))
+        print(input_png,"does not exist in ",os.path.abspath('.'))
         exit()
 
-    # 2 tile PNG with image_tiler.py --- Letter / A4
 
-    tile_list = image_tiler(
-        input_png, 
-        format, 
-        dir_path)
+    # 2 convert individual PNGs to PDFs
+    formats = ['letter','tabloid','a0']
+    for f in formats:
+        print("Working on",f,"pattern sheets.")
+        pattern_tile(input_png, f, dir_path)
 
-    # 3 convert individual PNGs to PDFs
-
-    image_conv_pdf(dir_path, tile_list)
    
-    # 4 merge the individual PDFs with pdf_merge.py
+        # 4 merge the individual PDFs with pdf_merge.py
+        merged_temp = f + 'merged.pdf'
+        merge_pdfs(
+            dir_path, 
+            merged_temp)
 
-    merge_pdfs(
-        dir_path, 
-        'merged.pdf')
+        # 5 final output file named and copied to base directory
+        timestr = time.strftime("%Y%m%d")
+        output_pdf = 'LearnMYOG_Pattern_'+ f + '_' + timestr + '.pdf'
+        shutil.copy(dir_path + merged_temp, output_pdf)
+        print()
+        print(">>>>>>>>> Created: " + output_pdf +" <<<<<<<<<")
 
-    # 5 final output file named and copied to base directory
-    timestr = time.strftime("%Y%m%d")
-    output_pdf = 'PatternSheets_'+format+'_'+timestr+'.pdf'
-    shutil.copy(dir_path+'merged.pdf',output_pdf)
-    print()
-    print(">>>>>>>>> Created:" + output_pdf)
+        prepare_temp_dir(dir_path)  # clean up after yourself
 
-    print()
-    print("--- %s seconds elapsed---" % (time.time() - start_time))
+        print()
+        print("--- %s seconds elapsed---" % (time.time() - start_time))
+
+
+
+#### HELPER FUNCTIONS ####
+
+def prepare_temp_dir(dir_path):
+    if os.path.exists(dir_path):
+        try:
+            for i in os.listdir(dir_path):
+                os.remove(dir_path+i)
+        except OSError as e:
+            print("Error: %s : %s" % (dir_path, e.strerror))
+    else: 
+        os.mkdir(dir_path)
+
+
 
 if __name__ == '__main__':
     pattern_exporter(
-        input_png='pattern.png', 
-        format='letter')
+        input_png='pattern.png')
