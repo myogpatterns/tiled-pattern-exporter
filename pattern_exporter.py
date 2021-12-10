@@ -3,16 +3,23 @@
 #
 #   Created for LearnMYOG.com
 #   Automates creation of PDF pattern sheets from Inkscape PNG export
-#   From large format PNG create A0, tabloid/A3 and letter/A4 merged patternsl
+#   From large format PNG create A0, tabloid/A3 and letter/A4 merged patterns
 #   
-#   use python3 pattern_exporter.py input.png output.pdf format=(letter, tabloid, a0)
+#   use python3 pattern_exporter.py input.png
 #
-#   1. Export PNG with size in multiple of 7.5 inches wide and 10 inches tall @ 300dpi.
-#   2. Tile huge PNG into pattern-#.pngs with image_tiler.py
-#   3. Convert pattern-#.pngs to PDFs with image_conv_pdf.py, saves into /pdfs/
-#   Add page numbers, copyright, cut registration, and alignment aids
-#   4. Merge individual pdfs using pdf_merge.py
+#   For best results:
+#   'import.png' is PNG size in multiple of 7.5 inches wide and 10 inches tall @ 300dpi.
 #   
+#   pattern_tile.py performs image operations:
+#       - tiles for letter (a4), tabloid (a3) and 36 x 48 inch (a0)
+#       - adds cut and alignment guides
+#       - adds page numbers and copyright
+#       - removes alpha layer and adds border
+#       - converts to pdfs
+#
+#   pdf_merge.py finds all pdfs in dir_path and merges into one pdf
+#
+#   Next:
 #   Add argparse for automated help
 #
 #--------------------------------------------------------------
@@ -61,14 +68,15 @@ def pattern_exporter(input_png):
         timestr = time.strftime("%Y%m%d")
         output_pdf = 'LearnMYOG_Pattern_'+ f + '_' + timestr + '.pdf'
         shutil.copy(dir_path + merged_temp, output_pdf)
+
+        # output messages
         print()
         print(">>>>>>>>> Created: " + output_pdf +" <<<<<<<<<")
-
-        prepare_temp_dir(dir_path)  # clean up after yourself
 
         print()
         print("--- %s seconds elapsed---" % (time.time() - start_time))
 
+        prepare_temp_dir(dir_path)  # clean up after yourself
 
 
 #### HELPER FUNCTIONS ####

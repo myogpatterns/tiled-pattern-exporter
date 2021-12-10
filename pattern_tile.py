@@ -1,18 +1,18 @@
-# image_conv_pdf.py
+#--------------------------------------------------------------
+#   pattern_tile.py
+#
+#   Created for LearnMYOG.com
+#   Automates creation of PDF pattern sheets from Inkscape PNG export
+#   From large format PNG create A0, tabloid/A3 and letter/A4 merged patterns
 # 
-# Tiles, adds cut registration, alignment guides, and converts to PDF
-# Wand is imagemagick
-# PDFs at 300dpi
-#
-# add format parameter
-# define formats and constants
-# get exported png
-# overlay alignment guides based on format
-    # for A0, no cut lines
-# tile, add borders, add cutlines, add texts per page
-# convert tile to pdf and save
+#   Tiles, adds cut registration, alignment guides, and converts to PDF
+#   Wand requires imagemagick to be installed locally
+#   https://imagemagick.org/script/download.php
+#   
+#   import.png must be 300dpi and sized a multiple of 7.5 in wide by 10 in tall
 #
 #
+#--------------------------------------------------------------
 
 
 import os, glob, shutil, math
@@ -81,9 +81,11 @@ def pattern_tile(import_png, format, dir_path):
         
         while currenty < img.height:
             while currentx < img.width:
-                with img[currentx:currentx+ppi_width, currenty:currenty+ppi_height] as tile:
-                        tile_id = dir_path + os.path.splitext(import_png)[0] + "-" + str(i).zfill(2) +".png"
-                        tile.save(filename=tile_id)
+                #with img[currentx:currentx+ppi_width, currenty:currenty+ppi_height] as tile:
+                with img.clone() as cloned:
+                    cloned.crop(left=currentx, top=currenty, width= ppi_width, height= ppi_height)
+                    tile_id = dir_path + os.path.splitext(import_png)[0] + "-" + str(i).zfill(2) +".png"
+                    cloned.save(filename=tile_id)
                 currentx += ppi_width
                 i+=1
             currenty += ppi_height
@@ -162,26 +164,6 @@ def pattern_tile(import_png, format, dir_path):
     
         
 
-#### Functions ####
-
-#remove alpha channels for pdf conversion
-    #for i in png_list: 
-    #    if hasAlpha(i):     
-    #        removeAlpha(i,i)
-    #        print("Processing",i)
-    #    else:
-    #       pass
-
-def hasAlpha(image_path):
-    with Image(filename=image_path) as img:
-        alpha = img.alpha_channel
-        return alpha
-
-def removeAlpha(image_path, new_image_path):
-    with Image(filename=image_path) as img:
-        img.alpha_channel = 'remove' #close alpha channel   
-        img.background_color = Color('white')
-        img.save(filename=new_image_path)
 
 
 if __name__ == '__main__':

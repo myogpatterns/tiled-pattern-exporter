@@ -1,4 +1,10 @@
-# pdf_merging.py
+#--------------------------------------------------------------
+#   pdf_merge.py
+#
+#   Created for LearnMYOG.com
+#   Merges all pdf files in dir_path into one pdf file
+#   
+#--------------------------------------------------------------
 
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
