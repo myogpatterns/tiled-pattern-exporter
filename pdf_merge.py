@@ -6,10 +6,11 @@
 #   
 #--------------------------------------------------------------
 
-import os
+import os, time
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
 def merge_pdfs(dir_path, output):
+    timestr = str('D:' + time.strftime("%Y%m%d%H%M%S"))
 
     pdf_writer = PdfFileWriter()
 
@@ -27,6 +28,11 @@ def merge_pdfs(dir_path, output):
             for page in range(pdf_reader.getNumPages()):
                 # Add each page to the writer object
                 pdf_writer.addPage(pdf_reader.getPage(page))
+                pdf_writer.addMetadata({
+                    '/Author': 'Tim @ LearnMYOG.com',
+                    '/CreationDate': timestr,
+                    '/Producer': 'https://github.com/myogpatterns/tiled-pattern-exporter'
+                })
 
     # Write out the merged PDF
     with open(dir_path+output, 'wb') as out:
