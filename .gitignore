@@ -4,6 +4,11 @@
 
 # My additions
 .DS_Store
+pattern*.png
+pdfs/*
+*.pdf
+*.svg
+operations.txt
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
