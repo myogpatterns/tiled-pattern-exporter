@@ -15,16 +15,14 @@
 #--------------------------------------------------------------
 
 
-import os, glob, shutil, math
+import os, glob
 from wand.image import Image, Color
 from wand.drawing import Drawing
-import wand.display
+import wand.display 
 
 
 
 def pattern_tile(import_png, format, dir_path):
-    
-
 
     # formats accepted
     format = format.lower() #make case-insensitive
@@ -58,7 +56,6 @@ def pattern_tile(import_png, format, dir_path):
     with Image(filename=import_png) as img:
         img.units='pixelsperinch'
         img.resolution=300
-        #wand.display.display(img)  #debug display
         print(import_png +' is ' + str(img.width/ppi) + ' by '+ str(img.height/ppi) + ' at ' + str(img.resolution[0]) + ' ' + img.units)
 
 
@@ -67,11 +64,6 @@ def pattern_tile(import_png, format, dir_path):
             with Image(filename=guides_png) as guides:
                 img.composite(guides, left=0, top=0)
 
-        # Expand to A0 tile size
-        #if format == 'a0':
-        if img.width < ppi_width:
-            #with img[]
-            print(img.size)
 
         #### Tile Img ####
         currentx = 0
@@ -81,7 +73,6 @@ def pattern_tile(import_png, format, dir_path):
         
         while currenty < img.height:
             while currentx < img.width:
-                #with img[currentx:currentx+ppi_width, currenty:currenty+ppi_height] as tile:
                 with img.clone() as cloned:
                     cloned.crop(left=currentx, top=currenty, width= ppi_width, height= ppi_height)
                     tile_id = dir_path + os.path.splitext(import_png)[0] + "-" + str(i).zfill(2) +".png"
@@ -119,7 +110,7 @@ def pattern_tile(import_png, format, dir_path):
             img.border('white', 150, 150)
 
                 
-            # Add cut registrations
+            # Add lines and texts
             with Drawing() as draw:
                 # cut registration lines 
                 draw.push()
@@ -152,15 +143,15 @@ def pattern_tile(import_png, format, dir_path):
                 draw(img)
                 draw.pop()
 
-                    #wand.display.display(img)
-
-
+            # Convert to PDF
             with img.convert('pdf') as converted:
                 fileout = os.path.splitext(i)[0]+'.pdf'
                 converted.save(filename=fileout)
                 print("Converted",i,"from",img.format,"to",fileout,converted.format)
 
         pg_num += 1
+
+        #wand.display.display(img)  #debug display
     
         
 

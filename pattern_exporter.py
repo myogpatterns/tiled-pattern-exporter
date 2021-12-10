@@ -24,10 +24,11 @@
 #
 #--------------------------------------------------------------
 
-import sys, os, shutil, string, time
+import sys, os, shutil, time
 from pattern_tile import pattern_tile
 from pdf_merge import merge_pdfs
 
+# Initialize process timer
 start_time = time.time()
 
 
@@ -36,7 +37,6 @@ def pattern_exporter(input_png):
     # Set variables
     if len(sys.argv) > 1:
         input_png = sys.argv[1]
-        #format = sys.argv[2]
     
     dir_path = 'pdfs/'
     
@@ -73,8 +73,8 @@ def pattern_exporter(input_png):
         print()
         print(">>>>>>>>> Created: " + output_pdf +" <<<<<<<<<")
 
-        print()
         print("--- %s seconds elapsed---" % (time.time() - start_time))
+        print()
 
         prepare_temp_dir(dir_path)  # clean up after yourself
 
