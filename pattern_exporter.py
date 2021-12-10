@@ -3,84 +3,96 @@
 #
 #   Created for LearnMYOG.com
 #   Automates creation of PDF pattern sheets from Inkscape PNG export
+#   From large format PNG create A0, tabloid/A3 and letter/A4 merged patterns
+#   
+#   use python3 pattern_exporter.py input.png
 #
-#   1. Export PNG with size in multiple of 7.5 inches wide and 10 inches tall @ 300dpi.
-#   2. Tile huge PNG into pattern-#.pngs with image_tiler.py
-#   3. Convert pattern-#.pngs to PDFs with image_conv_pdf.py, saves into /pdfs/
-#   4. Merge individual pdfs using pdf_merge.py
-#   5. Watermark cut lines with pdf_watermarker.py
+#   For best results:
+#   'import.png' is PNG size in multiple of 7.5 inches wide and 10 inches tall @ 300dpi.
+#   
+#   pattern_tile.py performs image operations:
+#       - tiles for letter (a4), tabloid (a3) and 36 x 48 inch (a0)
+#       - adds cut and alignment guides
+#       - adds page numbers and copyright
+#       - removes alpha layer and adds border
+#       - converts to pdfs
 #
+#   pdf_merge.py finds all pdfs in dir_path and merges into one pdf
+#
+#   Next:
+#   Add argparse for automated help
 #
 #--------------------------------------------------------------
 
-import sys, os, shutil, string, time
-from image_tiler import image_tiler
-from image_conv_pdf import image_conv_pdf
+import sys, os, shutil, time
+from pattern_tile import pattern_tile
 from pdf_merge import merge_pdfs
-from pdf_watermarker import create_watermark
 
+# Initialize process timer
 start_time = time.time()
 
-def pattern_exporter(input_png, output_pdf):
+
+def pattern_exporter(input_png):
 
     # Set variables
     if len(sys.argv) > 1:
         input_png = sys.argv[1]
-        output_pdf = sys.argv[2]
     
-    tile_width = 7.5    # inches
-    tile_height = 10
     dir_path = 'pdfs/'
     
     
     # 1 check if pattern.PNG exists, create or cleanup dir_paths folder
 
     if os.path.exists(input_png):
-        if os.path.exists(dir_path):
-            try:
-                for i in os.listdir(dir_path):
-                    os.remove(dir_path+i)
-            except OSError as e:
-                print("Error: %s : %s" % (dir_path, e.strerror))
-        else: 
-            os.mkdir(dir_path)
-        print("Preparing", dir_path)
+        prepare_temp_dir(dir_path)
+        
     else:
-        print(input_png,"does not exist in",os.path.abspath('.'))
+        print(input_png,"does not exist in ",os.path.abspath('.'))
         exit()
 
-    # 2 tile PNG with image_tiler.py
 
-    image_tiler(
-        input_png, 
-        tile_width, 
-        tile_height, 
-        dir_path)
+    # 2 convert individual PNGs to PDFs
+    formats = ['letter','tabloid','a0']
+    for f in formats:
+        print("Working on",f,"pattern sheets.")
+        pattern_tile(input_png, f, dir_path)
 
-    # 3 convert individual PNGs to PDFs
-
-    image_conv_pdf(dir_path)
    
-    # 4 merge the individual PDFs with pdf_merge.py
+        # 4 merge the individual PDFs with pdf_merge.py
+        merged_temp = f + 'merged.pdf'
+        merge_pdfs(
+            dir_path, 
+            merged_temp)
 
-    merge_pdfs(
-        dir_path, 
-        dir_path+'merged.pdf')
+        # 5 final output file named and copied to base directory
+        timestr = time.strftime("%Y%m%d")
+        output_pdf = 'LearnMYOG_Pattern_'+ f + '_' + timestr + '.pdf'
+        shutil.copy(dir_path + merged_temp, output_pdf)
 
-    # 5 watermark merged file
+        # output messages
+        print()
+        print(">>>>>>>>> Created: " + output_pdf +" <<<<<<<<<")
 
-    if os.path.exists('watermark.pdf'):
-        create_watermark(
-            dir_path+'merged.pdf', 
-            output_pdf,
-            'watermark.pdf')
-    else:
-        shutil.copy(dir_path+'merged.pdf',output_pdf)
-        print("Watermark.PDF not found. "+output_pdf+" created without watermark.")
+        print("--- %s seconds elapsed---" % (time.time() - start_time))
+        print()
 
-    print("--- %s seconds ---" % (time.time() - start_time))
+        prepare_temp_dir(dir_path)  # clean up after yourself
+
+
+#### HELPER FUNCTIONS ####
+
+def prepare_temp_dir(dir_path):
+    if os.path.exists(dir_path):
+        try:
+            for i in os.listdir(dir_path):
+                os.remove(dir_path+i)
+        except OSError as e:
+            print("Error: %s : %s" % (dir_path, e.strerror))
+    else: 
+        os.mkdir(dir_path)
+
+
 
 if __name__ == '__main__':
     pattern_exporter(
-        input_png='pattern.png', 
-        output_pdf='patternSheets.pdf')
+        input_png='pattern.png')
