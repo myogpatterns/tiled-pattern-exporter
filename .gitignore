@@ -7,6 +7,7 @@
 pattern*.png
 pdfs/*
 *.pdf
+/*.png
 *.svg
 operations.txt
 

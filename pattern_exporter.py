@@ -5,6 +5,7 @@
 #   Automates creation of PDF pattern sheets from Inkscape PNG export
 #   From large format PNG create A0, tabloid/A3 and letter/A4 merged patterns
 #   
+#   virtualenv: source .venv/bin/activate
 #   use python3 pattern_exporter.py input.png
 #
 #   For best results:
