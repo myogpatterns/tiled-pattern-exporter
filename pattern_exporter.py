@@ -37,6 +37,11 @@ def pattern_exporter(input_png):
     # Set variables
     if len(sys.argv) > 1:
         input_png = sys.argv[1]
+        paperSize = sys.argv[2]
+        if paperSize == 'all':
+            formats = ['letter','tabloid','a0']
+        else: 
+            formats = [paperSize]
     
     dir_path = 'pdfs/'
     
@@ -52,7 +57,7 @@ def pattern_exporter(input_png):
 
 
     # 2 convert individual PNGs to PDFs
-    formats = ['letter','tabloid','a0']
+    # formats = ['letter','tabloid','a0']
     for f in formats:
         print("Working on",f,"pattern sheets.")
         pattern_tile(input_png, f, dir_path)
@@ -95,4 +100,5 @@ def prepare_temp_dir(dir_path):
 
 if __name__ == '__main__':
     pattern_exporter(
-        input_png='pattern.png')
+        input_png = 'pattern.png',
+        paperSize = 'all')
