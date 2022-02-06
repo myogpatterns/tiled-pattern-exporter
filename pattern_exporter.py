@@ -32,7 +32,7 @@ from pdf_merge import merge_pdfs
 start_time = time.time()
 
 
-def pattern_exporter(input_png):
+def pattern_exporter(input_png, paperSize):
 
     # Set variables
     if len(sys.argv) > 1:
@@ -71,7 +71,8 @@ def pattern_exporter(input_png):
 
         # 5 final output file named and copied to base directory
         timestr = time.strftime("%Y%m%d")
-        output_pdf = 'LearnMYOG_Pattern_'+ f + '_' + timestr + '.pdf'
+        fname = os.path.basename(input_png).split('.')[0]
+        output_pdf = fname + '_' + f + '_' + timestr + '.pdf'
         shutil.copy(dir_path + merged_temp, output_pdf)
 
         # output messages
