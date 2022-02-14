@@ -36,7 +36,11 @@ start_time = time.time()
 def pattern_exporter(input_png, paperSize):
 
     # Set variables
-    if len(sys.argv) > 1:
+    if len(sys.argv) == 2:
+        input_png = sys.argv[1]
+        formats = ['letter','tabloid','a0']
+
+    elif len(sys.argv) > 2:
         input_png = sys.argv[1]
         paperSize = sys.argv[2]
         if paperSize == 'all':
