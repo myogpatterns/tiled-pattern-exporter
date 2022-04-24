@@ -6,7 +6,7 @@
 #   From large format PNG create A0, tabloid/A3 and letter/A4 merged patterns
 #   
 #   virtualenv: source .venv/bin/activate
-#   use python3 pattern_exporter.py input.png
+#   use python3 pattern_exporter.py input.png paperSize
 #
 #   For best results:
 #   'import.png' is PNG size in multiple of 7.5 inches wide and 10 inches tall @ 300dpi.
@@ -33,10 +33,10 @@ from pdf_merge import merge_pdfs
 start_time = time.time()
 
 
-def pattern_exporter(input_png, paperSize):
+def pattern_exporter(input_png, paperSize = 'all'):
 
     # Set variables
-    if len(sys.argv) == 2:
+    if len(sys.argv) <= 2:
         input_png = sys.argv[1]
         formats = ['letter','tabloid','a0']
 
