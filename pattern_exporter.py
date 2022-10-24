@@ -38,7 +38,7 @@ def pattern_exporter(input_png, paperSize = 'all'):
     # Set variables
     if len(sys.argv) <= 2:
         input_png = sys.argv[1]
-        formats = ['letter','tabloid','a0']
+        formats = ['letter','tabloid']
 
     elif len(sys.argv) > 2:
         input_png = sys.argv[1]
