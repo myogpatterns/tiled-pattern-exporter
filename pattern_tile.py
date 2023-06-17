@@ -134,11 +134,11 @@ def pattern_tile(import_png, format, dir_path):
 
                 # texts
                 draw.push()
-                draw.font_size = 32
+                draw.font_size = 40
                 draw.text_alignment='center'
                 draw.fill_color = Color('grey50') 
-                draw.font_family = "Arial"
-                draw.text(int(img.width/2), int(img.height-100),"2021 © LearnMYOG.com")
+                draw.font_family = "Source Sans Pro"
+                draw.text(int(img.width/2), int(img.height-100),"2023 © LearnMYOG.com")
                 draw.text(int(img.width-100), int(img.height-100),str(pg_num))
                 draw(img)
                 draw.pop()

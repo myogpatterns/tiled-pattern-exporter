@@ -13,7 +13,29 @@ For best results, input an exported PNG with size in multiples of 7.5 inches wid
 1.   Place exported PNG in script directory
 1.   Execute with the following command:
 
-`python3 pattern_exporter.py 'input_file.png'`
+`python3 pattern_exporter.py 'input_file.png' [format = 'letter','tabloid','a0', 'all' (default)]`
 
 ## Desired improvements
 1. Implement basic UI
+
+
+Good readme
+1 Title
+# Title
+## Subtitle 
+
+2 Paragraph Explanation and problem it solves (SEO keywords)
+
+3 Visual helper
+Youtube demo if applicable
+
+4 User installation instructions
+
+5 Contributor instructions (build and install) and how to work on it
+
+6 Expectations for contributors
+Invite to submit issue or submit a PR for features
+
+7 Known issues, coming soon
+
+8 Donation link, buy me a coffee
