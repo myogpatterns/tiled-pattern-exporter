@@ -30,11 +30,11 @@ def pattern_tile(import_png, format, dir_path):
     if (format == 'letter'):
         tile_width = 7.5
         tile_height = 10
-        guides_png = 'guides/cut_guides_letter.png'
+        guides_png = 'guides/cut_guides_letter_2023.png'
     elif (format == 'tabloid'):
         tile_width = 15
         tile_height = 10
-        guides_png = 'guides/cut_guides_tabloid.png'
+        guides_png = 'guides/cut_guides_tabloid_2023.png'
     elif (format == 'a0'):
         tile_width = 45
         tile_height = 30
@@ -138,6 +138,8 @@ def pattern_tile(import_png, format, dir_path):
                 draw.text_alignment='center'
                 draw.fill_color = Color('grey50') 
                 draw.font_family = "Source Sans Pro"
+                fname = os.path.basename(import_png).split('.')[0]
+                draw.text(int(img.width/2), int(120), fname)
                 draw.text(int(img.width/2), int(img.height-100),"2023 © LearnMYOG.com")
                 draw.text(int(img.width-100), int(img.height-100),str(pg_num))
                 draw(img)
